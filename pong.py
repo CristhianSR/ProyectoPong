@@ -33,10 +33,24 @@ ball.shapesize(stretch_wid=2,stretch_len=2)
 ball.dx =2
 ball.dy =2
 
+score1=0
+score2=0
+
+score = turtle.Turtle()
+score.speed()
+score.color("#5F1741")
+score.penup()
+score.hideturtle()
+
+score.goto(0,300)
+score.write("Jugador 1: 0               Jugador 2:0", align="center", font=("San Francisco",20))
+
+
 red=turtle.Turtle()
 red.color("white")
 red.goto(0,400)
 red.goto(0,-400)
+
 
 #Funciones del jugador 1
 def player1_up():
@@ -87,11 +101,37 @@ while True:
     #Bordes en x
     if ball.xcor() > 710:
         ball.goto(0,0)
-        ball.dx =-1
-
+        ball.dx =1
+        score1 += 1
+        score.clear()
+        score.write("Jugador 1: {}                  Jugador 2: {}".format(score1,score2), align="center", font=("San Francisco",20))
+        
+        
     if ball.xcor() < -710:
         ball.goto(0,0)
-        ball.dx =1
+        ball.dx =-1
+        score2 +=1
+        score.clear()
+        score.write("Jugador 1: {}                  Jugador 2: {}".format(score1,score2), align="center", font=("San Francisco",20))
+
+        
+        
+
+    if ((ball.xcor() < - 620 and ball.xcor() > -630)
+          and (ball.ycor() < player1.ycor() + 100 and ball.ycor() > player1.ycor() - 100)):
+        ball.dx *= -1
+  
+    if((ball.xcor() > 620 and ball.xcor() < 630)
+          and(ball.ycor() < player2.ycor()+100 and ball.ycor() > player2.ycor()-100)):
+        ball.dx *= -1
+
+
+
+  
+
+
+    
+
 
     
 
