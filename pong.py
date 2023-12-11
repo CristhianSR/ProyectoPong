@@ -2,10 +2,13 @@ import turtle
 
 window= turtle.Screen()
 
+#Ventana
 window.title("Atari Pong")
 window.setup(width=1420, height=720)
 window.bgcolor("#48C1A6")
 window.tracer(0)
+
+#Creacion de reactangulos
 
 player1=turtle.Turtle()
 player1.speed(0)
@@ -116,6 +119,7 @@ while True:
 
         
         
+#Relacion de aspecto de la pelota y paletas al momento de golpear
 
     if ((ball.xcor() < - 620 and ball.xcor() > -630)
           and (ball.ycor() < player1.ycor() + 100 and ball.ycor() > player1.ycor() - 100)):
