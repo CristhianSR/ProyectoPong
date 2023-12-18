@@ -129,18 +129,3 @@ while True:
           and(ball.ycor() < player2.ycor()+100 and ball.ycor() > player2.ycor()-100)):
         ball.dx *= -1
 
-
-
-  
-
-
-    
-
-
-    
-
-
-
-
-
- 
