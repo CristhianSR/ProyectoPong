@@ -22,7 +22,7 @@ player2=turtle.Turtle()
 player2.speed(0)
 player2.shape("square")
 player2.color("#5F1741")
-player2.penup()
+player2.penup() 
 player2.goto(660,0)
 player2.shapesize(stretch_wid=9,stretch_len=1)
 
