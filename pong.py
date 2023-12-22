@@ -1,13 +1,14 @@
 import os
 import turtle
-import simpleaudio
-
+import pygame
 
 #Variables pausar el juego, puntaje máximo y el ganador de la partida
 paused = False
 max_points=5
 winner=None
 
+#Llame a la libreria pygame porque me daba error al instalar desde pip, simplesound de tkinter
+pygame.init()
 window= turtle.Screen()
 
 #Ventana
@@ -16,8 +17,9 @@ window.setup(width=1420, height=720)
 window.bgcolor("#008080")
 window.tracer(0)
 
-background_music = simpleaudio.WaveObject.from_wave_file("background_music.wav")  
-background_music_player = background_music.play()
+#Sonido al momento de la pelota golpear con la paleta
+collision_sound = pygame.mixer.Sound("Bonk.mp3")  
+background_music = pygame.mixer.Sound("sweden-minecraft.mp3") 
 
 #Creación de rectángulos para jugador 1 y 2
 
@@ -77,7 +79,6 @@ text2= turtle.Turtle()
 text2.color("#E0FFFF")
 text2.penup()
 text2.hideturtle()
-
 
 #Funciones del jugador 1 para arriba y abajo, velocidad con la que se mueven los rectángulos
 def player1_up():
@@ -172,7 +173,7 @@ def reset_window():
    player2.goto(660,0)
 
 
-# Registrar teclas para reiniciar, pausar y salir el juego
+# Registrar teclas para, pausar y salir el juego
 window.listen()
 window.onkeypress(game_pause, "space")
 window.onkeypress(game_exit, "Escape")
@@ -218,10 +219,12 @@ while True:
     if ((ball.xcor() < - 620 and ball.xcor() > -630)
           and (ball.ycor() < player1.ycor() + 100 and ball.ycor() > player1.ycor() - 100)):
         ball.dx *= -1
+        collision_sound.play()
   
     if((ball.xcor() > 620 and ball.xcor() < 630)
           and(ball.ycor() < player2.ycor()+100 and ball.ycor() > player2.ycor()-100)):
         ball.dx *= -1
+        collision_sound.play()
    
 
     

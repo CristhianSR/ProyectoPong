@@ -1,7 +1,13 @@
 import subprocess
 import tkinter as tk 
+import pygame
+
+pygame.init()
 
 window =tk.Tk()
+
+background_music = pygame.mixer.Sound("sweden-minecraft.mp3") 
+background_music.play(loops=-1)
 
 #Definición para que se pueda dar click en los botones
 def open_pong():
