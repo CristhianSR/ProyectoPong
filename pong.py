@@ -1,25 +1,30 @@
 import os
 import turtle
+import simpleaudio
 
+
+#Variables pausar el juego, puntaje máximo y el ganador de la partida
 paused = False
-max_points=2
+max_points=5
 winner=None
-
 
 window= turtle.Screen()
 
 #Ventana
 window.title("Atari Pong")
 window.setup(width=1420, height=720)
-window.bgcolor("#48C1A6")
+window.bgcolor("#008080")
 window.tracer(0)
 
-#Creacion de reactangulos
+background_music = simpleaudio.WaveObject.from_wave_file("background_music.wav")  
+background_music_player = background_music.play()
+
+#Creación de rectángulos para jugador 1 y 2
 
 player1=turtle.Turtle()
 player1.speed(0)
 player1.shape("square")
-player1.color("#5F1741")
+player1.color("#E0FFFF")
 player1.penup()
 player1.goto(-660,0)
 player1.shapesize(stretch_wid=9,stretch_len=1)
@@ -27,44 +32,54 @@ player1.shapesize(stretch_wid=9,stretch_len=1)
 player2=turtle.Turtle()
 player2.speed(0)
 player2.shape("square")
-player2.color("#5F1741")
+player2.color("#E0FFFF")
 player2.penup() 
 player2.goto(660,0)
 player2.shapesize(stretch_wid=9,stretch_len=1)
 
+#Creación de la pelota con sus características
 ball=turtle.Turtle()
 ball.speed(0)
 ball.shape("circle")
-ball.color("#5F1741")
+ball.color("#E0FFFF")
 ball.penup()
 ball.goto(0,0)
 ball.shapesize(stretch_wid=2,stretch_len=2)
-ball.dx =4
-ball.dy =4
+ball.dx =4                  #Velocidad de la pelota en el eje x
+ball.dy =4                  #Velocidad de la pelota en el eje y
 
+#Creación del marcador de la partida
 score1=0
 score2=0
-
 score = turtle.Turtle()
 score.speed()
-score.color("#5F1741")
+score.color("#E0FFFF")
 score.penup()
 score.hideturtle()
 
+#Marcador en la pantalla del juego
 score.goto(0,300)
 score.write("Jugador 1: 0               Jugador 2:0", align="center", font=("San Francisco",20))
 
+#Creación de la línea de la mitad del juego
 red=turtle.Turtle()
-red.color("white")
+red.color("#E0FFFF")
 red.goto(0,400)
 red.goto(0,-400)
 
+#Mostrar mensaje por pantalla
 text= turtle.Turtle()
-text.color("#5F1741")
+text.color("#E0FFFF")
 text.penup()
 text.hideturtle()
 
-#Funciones del jugador 1, velocidad
+text2= turtle.Turtle()
+text2.color("#E0FFFF")
+text2.penup()
+text2.hideturtle()
+
+
+#Funciones del jugador 1 para arriba y abajo, velocidad con la que se mueven los rectángulos
 def player1_up():
     y=player1.ycor()
     y+=30
@@ -77,7 +92,7 @@ def player1_down():
     if y >-275:
      player1.sety(y)
 
-#Teclado para el jugador 1
+#Asignación de teclas para el jugador 1
 window.listen()
 window.onkeypress(player1_up,"w") 
 window.onkeypress(player1_down,"s")
@@ -95,7 +110,7 @@ def player2_down():
     if y > -275:
       player2.sety(y)
     
-#Teclado para el jugador 2
+#Asignación de teclas para el jugador 2
 window.listen()
 window.onkeypress(player2_up,"Up")
 window.onkeypress(player2_down,"Down")
@@ -106,17 +121,17 @@ def check_winner():
     if score1 >= max_points:
         winner = "Jugador 1"
         show_winner_screen()
-        reset_game()
+        
     elif score2 >= max_points:
         winner = "Jugador 2"
         show_winner_screen()
-        reset_game()
+        
 
 # Función para enseñar el ganador por pantalla
 def show_winner_screen():
     winner_window = turtle.Screen()
     winner_window.title("¡Tenemos un ganador!")
-    winner_window.bgcolor("#48C1A6")
+    winner_window.bgcolor("#E0FFFF")
     winner_text = turtle.Turtle()
     winner_text.speed(0)
     winner_text.color("#5F1741")
@@ -124,10 +139,7 @@ def show_winner_screen():
     winner_text.hideturtle()
     winner_text.goto(0, 0)
     winner_text.write("¡{} es el ganador!".format(winner), align="center", font=("San Francisco", 30))
-
     winner_window.mainloop()
-
-
 
 #Función para pausar el juego
 def game_pause():
@@ -139,38 +151,34 @@ def game_pause():
         text.write("Juego en Pausa", align="center", font=("San Francisco", 30))
         text.goto(0, -50)
         text.write("Presiona la barra espaciadora para continuar", align="center", font=("San Francisco", 30))
-        ball.dx, ball.dy = 3,3
+        ball.dx, ball.dy = 4,4
         text.penup()
     else:
-        ball.dx,ball.dy=3,3
+        ball.dx,ball.dy=4,4
         text.clear()
         window.title("Atari Pong")
         
+#Función para salir del juego
 def game_exit():
     global paused
     paused = True
     os._exit(0)
 
-
-#Funcion para reiniciar el juego
-def reset_game():
-   global score1,score2,winner
-   score1=0
-   score2=0
-   winner=None
-   window.clear()
+#Función para que las paletas regresen a su lugar despues de cada punto
+def reset_window():
    ball.goto(0,0)
-   ball.dx,ball.dy=3,3
-   score.clear()
-   score.write("Jugador 1: 0               Jugador 2:0", align="center", font=("San Francisco",20))
-   #no vale esta vaina
-    
+   ball.dx *=-1
+   player1.goto(-660,0)
+   player2.goto(660,0)
+
+
 # Registrar teclas para reiniciar, pausar y salir el juego
 window.listen()
 window.onkeypress(game_pause, "space")
 window.onkeypress(game_exit, "Escape")
-window.onkeypress(reset_game,"r")
 
+
+#Bucle while para ejecutar la mecánica del juego
 while True:
   window.update() 
   if not paused:
@@ -187,21 +195,25 @@ while True:
     #Bordes en x
     if ball.xcor() > 710:
         ball.goto(0,0)
-        ball.dx =1
+        ball.dx =4
+        #Marcador para el jugador 1 
         score1 += 1
         score.clear()
         score.write("Jugador 1: {}                  Jugador 2: {}".format(score1,score2), align="center", font=("San Francisco",20))
-        check_winner()
-        
+        check_winner() 
+        reset_window()
+
     if ball.xcor() < -710:
         ball.goto(0,0)
-        ball.dx =-1
+        ball.dx =-4
+        #Marcador para el jugador 2
         score2 +=1
         score.clear()
         score.write("Jugador 1: {}                  Jugador 2: {}".format(score1,score2), align="center", font=("San Francisco",20))
-        check_winner()
-           
-#Relacion de aspecto de la pelota y paletas al momento de golpear
+        check_winner() 
+        reset_window()
+
+#Relación de aspecto de la pelota y paletas al momento de golpear
 
     if ((ball.xcor() < - 620 and ball.xcor() > -630)
           and (ball.ycor() < player1.ycor() + 100 and ball.ycor() > player1.ycor() - 100)):
@@ -210,7 +222,7 @@ while True:
     if((ball.xcor() > 620 and ball.xcor() < 630)
           and(ball.ycor() < player2.ycor()+100 and ball.ycor() > player2.ycor()-100)):
         ball.dx *= -1
-
+   
 
     
     
